@@ -1,3 +1,5 @@
+Added [Dynamic Nodes]
+
 ### Purpose
 
 **NodeEditor** is conceived as a general-purpose Qt-based library aimed at
