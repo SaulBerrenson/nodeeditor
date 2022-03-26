@@ -39,6 +39,9 @@ Node(std::unique_ptr<NodeDataModel> && dataModel)
 
   connect(_nodeDataModel.get(), &NodeDataModel::embeddedWidgetSizeUpdated,
           this, &Node::onNodeSizeUpdated );
+
+  connect(_nodeDataModel.get(), &NodeDataModel::portSizeChanged,
+          this, &Node::onPortsUpdated);          
 }
 
 
@@ -60,6 +63,9 @@ save() const
   obj["y"] = _nodeGraphicsObject->pos().y();
   nodeJson["position"] = obj;
 
+  nodeJson["in"] = (int)_nodeDataModel->nPorts(PortType::In);
+  nodeJson["out"] = (int)_nodeDataModel->nPorts(PortType::Out);
+
   return nodeJson;
 }
 
@@ -76,6 +82,11 @@ restore(QJsonObject const& json)
   _nodeGraphicsObject->setPos(point);
 
   _nodeDataModel->restore(json["model"].toObject());
+
+  if (json.contains("in"))
+      _nodeState._inConnections.resize(json["in"].toInt());
+  if (json.contains("out"))
+      _nodeState._outConnections.resize(json["out"].toInt());
 }
 
 
@@ -209,6 +220,36 @@ onDataUpdated(PortIndex index)
   for (auto const & c : connections)
     c.second->propagateData(nodeData);
 }
+
+void 
+Node::onPortsUpdated()
+{
+    const auto nNewIn = _nodeDataModel->nPorts(PortType::In);
+    _nodeGeometry._nSources = nNewIn;
+    _nodeState._inConnections.resize(nNewIn);
+
+    const auto nNewOut = _nodeDataModel->nPorts(PortType::Out);
+    _nodeGeometry._nSinks = nNewOut;
+    _nodeState._outConnections.resize(nNewOut);	
+  
+    //Recalculate the nodes visuals. A data change can result in the node taking more space than before, so this forces a recalculate+repaint on the affected node
+    _nodeGraphicsObject->setGeometryChanged();
+    _nodeGeometry.recalculateSize();
+    _nodeGraphicsObject->update();
+    recalculateVisuals();
+}
+
+void
+Node::
+recalculateVisuals() const
+{
+    //Recalculate the nodes visuals. A data change can result in the node taking more space than before, so this forces a recalculate+repaint on the affected node
+    _nodeGraphicsObject->setGeometryChanged();
+    _nodeGeometry.recalculateSize();
+    _nodeGraphicsObject->update();
+    _nodeGraphicsObject->moveConnections();
+}
+
 
 void
 Node::
