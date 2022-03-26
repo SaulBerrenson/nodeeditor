@@ -72,7 +72,11 @@ eraseConnection(PortType portType,
                 PortIndex portIndex,
                 QUuid id)
 {
-  getEntries(portType)[portIndex].erase(id);
+    auto& entires = getEntries(portType);
+
+    if (portIndex < entires.size()) 
+        entires.at(portIndex).erase(id);    
+
 }
 
 

@@ -226,14 +226,15 @@ Node::onPortsUpdated()
 {
     const auto nNewIn = _nodeDataModel->nPorts(PortType::In);
     _nodeGeometry._nSources = nNewIn;
-    _nodeState._inConnections.resize(nNewIn);
+    _nodeState._inConnections.resize(nNewIn);     
 
-    const auto nNewOut = _nodeDataModel->nPorts(PortType::Out);
+    const auto nNewOut = _nodeDataModel->nPorts(PortType::Out); 
     _nodeGeometry._nSinks = nNewOut;
     _nodeState._outConnections.resize(nNewOut);	
   
     //Recalculate the nodes visuals. A data change can result in the node taking more space than before, so this forces a recalculate+repaint on the affected node
     _nodeGraphicsObject->setGeometryChanged();
+    _nodeGraphicsObject->moveConnections();
     _nodeGeometry.recalculateSize();
     _nodeGraphicsObject->update();
     recalculateVisuals();
