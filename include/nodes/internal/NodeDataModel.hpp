@@ -162,6 +162,8 @@ Q_SIGNALS:
 
   void embeddedWidgetSizeUpdated();
 
+  void portSizeChanged();  
+
 private:
 
   NodeStyle _nodeStyle;
