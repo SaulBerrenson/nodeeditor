@@ -1,9 +1,13 @@
 find_package(Catch2 2.3.0 REQUIRED)
 
-if (Qt6_FOUND)
-  find_package(Qt6 COMPONENTS Test)
+enable_testing()
+
+if(NODE_EDITOR_QT5)
+  find_package(Qt5 REQUIRED COMPONENTS Test )
+  set(QT_TEST_TARGET Qt5::Test)
 else()
-  find_package(Qt5 COMPONENTS Test)
+  find_package(Qt6 REQUIRED COMPONENTS Test )
+    set(QT_TEST_TARGET Qt::Test)
 endif()
 
 add_executable(test_nodes
@@ -25,12 +29,12 @@ target_link_libraries(test_nodes
   PRIVATE
     NodeEditor::nodes
     Catch2::Catch2
-    Qt::Test
+    ${QT_TEST_TARGET}
 )
 
 add_test(
   NAME test_nodes
   COMMAND
     $<TARGET_FILE:test_nodes>
-    $<$<BOOL:${NE_FORCE_TEST_COLOR}>:--use-colour=yes>
+    $<$<BOOL:${NODE_EDITOR_FORCE_TEST_COLOR}>:--use-colour=yes>
 )
