@@ -13,19 +13,14 @@ include(CMakeDependentOption)
 # NODE_EDITOR_FORCE_TEST_COLOR
 
 get_directory_property(_has_parent PARENT_DIRECTORY)
-if(_has_parent)
-  set(NODE_EDITOR_ROOT_PROJECT OFF)
-else()
-  set(NODE_EDITOR_ROOT_PROJECT ON)
-endif()
 
 set(NODE_EDITOR_DEVELOPER_DEFAULTS "${NODE_EDITOR_ROOT_PROJECT}" CACHE BOOL "Turns on default settings for development of NodeEditor")
 
 option(NODE_EDITOR_QT5 "Use Qt5" ON)
 option(NODE_EDITOR_FORCE_TEST_COLOR "Force colorized unit test output" OFF)
-cmake_dependent_option(NODE_EDITOR_BUILD_TESTING "Build tests" ${NODE_EDITOR_DEVELOPER_DEFAULTS} "BUILD_TESTING" ON)
-cmake_dependent_option(NODE_EDITOR_BUILD_EXAMPLES "Build examples" ${NODE_EDITOR_DEVELOPER_DEFAULTS} "BUILD_EXAMPLES" ON)
-cmake_dependent_option(NODE_EDITOR_BUILD_SHARED_LIBS "Build as shared library" ${NODE_EDITOR_DEVELOPER_DEFAULTS} "BUILD_SHARED_LIBS" ON)
+cmake_dependent_option(NODE_EDITOR_BUILD_TESTING "Build tests" OFF "BUILD_TESTING" ON)
+cmake_dependent_option(NODE_EDITOR_BUILD_EXAMPLES "Build examples" OFF "BUILD_EXAMPLES" ON)
+cmake_dependent_option(NODE_EDITOR_BUILD_SHARED_LIBS "Build as shared library" OFF "BUILD_SHARED_LIBS" ON)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------
 # Global options
@@ -93,7 +88,7 @@ file(GLOB_RECURSE NODES_HEADERS_FILES LIST_DIRECTORIES FALSE "include/*")
 
 if (NODE_EDITOR_BUILD_SHARED_LIBS)
   set(NODE_EDITOR_SHARED_OR_STATIC "SHARED")
-else (NODE_EDITOR_BUILD_SHARED_LIBS)
+else ()
   set(NODE_EDITOR_SHARED_OR_STATIC "STATIC")
 endif()
 
