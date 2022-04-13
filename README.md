@@ -26,8 +26,8 @@ connections updating  the whole graph.
 
 ### Dependencies
 
-* Qt >5.15
-* CMake 3.8
+* Qt >= 5.11
+* CMake 3.7.2
 * Catch2
 
 ### Current state
@@ -42,10 +42,18 @@ connections updating  the whole graph.
 
 ### Building
 
+#### Options
+
+* NODE_EDITOR_QT5 - Use Qt5
+* NODE_EDITOR_FORCE_TEST_COLOR - Force colorized unit test output
+* NODE_EDITOR_BUILD_TESTING - Build tests
+* NODE_EDITOR_BUILD_EXAMPLES - Build examples
+* NODE_EDITOR_BUILD_SHARED_LIBS - Build as shared library
+  
 #### Linux
 
 ~~~
-git clone git@github.com:paceholder/nodeeditor.git
+git clone git@github.com:exerros/nodeeditor.git
 cd nodeeditor
 mkdir build
 cd build
